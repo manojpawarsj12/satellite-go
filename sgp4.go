@@ -245,7 +245,7 @@ func sgp4init(opsmode *string, epoch float64, satrec *Satellite) (position, velo
 }
 
 // this procedure initializes the spg4 propagator. all the initialization is consolidated here instead of having multiple loops inside other routines.
-func initl(satn int64, grav GravConst, ecco, epoch, inclo, noIn float64, methodIn, opsmode string) (ainv, no, ao, con41, con42, cosio, cosio2, eccsq, omeosq, posq, rp, rteosq, sinio, gsto float64) {
+func initl(satn string, grav GravConst, ecco, epoch, inclo, noIn float64, methodIn, opsmode string) (ainv, no, ao, con41, con42, cosio, cosio2, eccsq, omeosq, posq, rp, rteosq, sinio, gsto float64) {
 	var ak, d1, adel, po float64
 
 	x2o3 := 2.0 / 3.0
