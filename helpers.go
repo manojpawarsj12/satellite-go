@@ -28,18 +28,28 @@ type LookAngles struct {
 	Az, El, Rg float64
 }
 
-func parseBstar(s string) float64 {
-	s = strings.TrimSpace(s)
-	if len(s) > 5 {
-		mantissa := s[:5]
-		exponent := s[5:]
-		s = mantissa + "e" + exponent
+func parseBStar(bstar string) float64 {
+	var (
+		sign     string
+		val      string
+		exponent string
+	)
+
+	bstar = strings.TrimSpace(bstar)
+	switch bstar[0] {
+	case '+', '-':
+		sign = string(bstar[0])
+		val = bstar[1:6]
+		exponent = bstar[6:8]
+	default:
+		sign = "+"
+		val = bstar[0:5]
+		exponent = bstar[5:7]
 	}
-	f, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		panic(err)
-	}
-	return f
+
+	parseableStr := sign + "0." + val + "e" + exponent
+
+	return parseFloat(parseableStr)
 }
 
 // Parses a two line element dataset into a Satellite struct
@@ -57,8 +67,8 @@ func ParseTLE(line1, line2 string, gravConst Gravity) (sat Satellite) {
 
 	// These three can be negative / positive
 	sat.ndot = parseFloat(strings.Replace(line1[33:43], " ", "", 2))
-	sat.nddot = parseBstar(line1[44:52])
-	sat.bstar = parseBstar(line1[53:61])
+	sat.nddot = parseBStar(line1[44:52])
+	sat.bstar = parseBStar(line1[53:61])
 	// LINE 1 END
 
 	// LINE 2 BEGIN
